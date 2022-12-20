@@ -3,6 +3,14 @@ apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'kotlin-parcelize' // парсилизация
 
 android {
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "ir.rev.vmadapter"
+    }
+}
+
+android {
     dataBinding {
         enabled = true
     }
