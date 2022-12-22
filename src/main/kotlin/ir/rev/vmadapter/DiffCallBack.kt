@@ -15,8 +15,8 @@ class DiffCallBack(private val oldList: List<Any>,
     override fun getNewListSize() = newList.size
 
     override fun areItemsTheSame(oldPos: Int, newPos: Int) : Boolean  {
-            val old = oldList[oldPos]
-            val new = newList[newPos]
+        val old = oldList[oldPos]
+        val new = newList[newPos]
         if (old::class != new::class) {
             return false
         }

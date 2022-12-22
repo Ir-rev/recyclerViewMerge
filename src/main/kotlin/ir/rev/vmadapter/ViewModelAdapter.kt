@@ -1,7 +1,6 @@
 package ir.rev.vmadapter
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
@@ -33,8 +32,19 @@ open class ViewModelAdapter(
     @Synchronized
     open fun reload(newItems: List<Any>) {
         when (mode) {
-            Mode.DIFF_UTILS -> reloadWithDiffUtils(newItems)
+            Mode.DIFF_UTILS       -> reloadWithDiffUtils(newItems)
             Mode.VIEW_MODEL_MERGE -> reloadWithViewModelMerge(newItems)
+        }
+    }
+
+    /***
+     * Показать LoadMore прогресс
+     */
+    open fun showLoadMoreProgress() {
+        if (items.lastOrNull() !is LoadMoreVM) {
+            cell<LoadMoreVM>(R.layout.base_components_item_load_more)
+            items.add(LoadMoreVM())
+            notifyItemInserted(itemCount - 1)
         }
     }
 
@@ -56,6 +66,7 @@ open class ViewModelAdapter(
         })
     }
 
+    /**@SelfDocumented*/
     @JvmOverloads
     inline fun <reified T : Any> cell(
         @LayoutRes layoutId: Int,
@@ -63,7 +74,7 @@ open class ViewModelAdapter(
         itemChecker: ItemChecker<T>
     ) {
         when (mode) {
-            Mode.DIFF_UTILS ->
+            Mode.DIFF_UTILS       ->
                 if (itemChecker !is ItemChecker.ForDiffUtils)
                     throw IllegalStateException("Can't create cell for $mode")
             Mode.VIEW_MODEL_MERGE ->
@@ -71,7 +82,7 @@ open class ViewModelAdapter(
                     throw IllegalStateException("Can't create cell for $mode")
         }
         @Suppress("UNCHECKED_CAST")
-        cellMap[T::class.java] = CellInfo(layoutId, 1, itemChecker as ItemChecker<Any>)
+        cellMap[T::class.java] = CellInfo(layoutId, bindingId, itemChecker as ItemChecker<Any>)
     }
 
     /**@SelfDocumented*/
@@ -209,7 +220,6 @@ open class ViewModelAdapter(
             }
 
         val message = "Cell info for class ${viewModel.javaClass.name} not found."
-        Log.d("checkResult", message)
         throw Exception(message)
     }
 
