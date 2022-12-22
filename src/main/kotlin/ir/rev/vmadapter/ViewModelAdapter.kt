@@ -42,7 +42,7 @@ open class ViewModelAdapter(
     @JvmOverloads
     inline fun <reified T : Any> cell(
         @LayoutRes layoutId: Int,
-        bindingId: Int = BR.viewModel,
+        bindingId: Int = 1,
         noinline areItemsTheSame: (T, T) -> Boolean = { a: T, b: T -> a == b },
         noinline areContentsTheSame: (T, T) -> Boolean = { a: T, b: T -> a == b }
     ) {
@@ -59,7 +59,7 @@ open class ViewModelAdapter(
     @JvmOverloads
     inline fun <reified T : Any> cell(
         @LayoutRes layoutId: Int,
-        bindingId: Int = BR.viewModel,
+        bindingId: Int = 1,
         itemChecker: ItemChecker<T>
     ) {
         when (mode) {
